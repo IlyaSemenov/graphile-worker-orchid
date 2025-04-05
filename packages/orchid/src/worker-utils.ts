@@ -30,9 +30,25 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
         priority => ${spec?.priority},
         flags => ${spec?.flags},
         job_key_mode => ${spec?.jobKeyMode}
-    )) job`
+      )) job
+    `
     return job
   }
 
-  return { addJob }
+  /**
+   * Remove pending job by job_key.
+   *
+   * Return job data if job was removed.
+   */
+  async function removeJob(jobKey: string): Promise<DbJob | undefined> {
+    // remove_job() always returns a single row, filled with NULLs if job was not found.
+    const { rows: [{ job }] } = await db.$query<{ job: DbJob }>`
+      SELECT row_to_json(graphile_worker.remove_job(
+        job_key => ${jobKey}
+      )) job
+    `
+    return job.id ? job : undefined
+  }
+
+  return { addJob, removeJob }
 }
