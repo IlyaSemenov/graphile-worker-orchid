@@ -51,5 +51,31 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
     return rows.at(0)
   }
 
-  return { addJob, removeJob }
+  async function waitJob(jobId: string, opts?: {
+    pollInterval: number
+  }) {
+    const { pollInterval = 1000 } = opts ?? {}
+    while (true) {
+      const { rows: [job] } = await db.$query<Pick<DbJob, "attempts" | "max_attempts" | "locked_by">>`
+          SELECT attempts, max_attempts, locked_by
+          FROM graphile_worker.jobs
+          WHERE id = ${jobId}
+        `
+      if (!job) {
+        // Job completed.
+        return
+      }
+      if (!job.locked_by && job.attempts >= job.max_attempts) {
+        // Job failed.
+        throw new Error("Job reached max attempts.")
+      }
+      await new Promise(resolve => setTimeout(resolve, pollInterval))
+    }
+  }
+
+  return {
+    addJob,
+    removeJob,
+    waitJob,
+  }
 }

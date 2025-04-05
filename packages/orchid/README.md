@@ -20,7 +20,11 @@ const db = orchidORM({ databaseURL: "..." }, {
   // table definitions
 })
 
-const { addJob, removeJob } = makeWorkerUtils(db)
+const {
+  addJob,
+  removeJob,
+  waitJob,
+} = makeWorkerUtils(db)
 ```
 
 ### addJob
@@ -49,4 +53,23 @@ Remove job by job key:
 
 ```ts
 await removeJob("testing")
+```
+
+### waitJob
+
+Wait for a job to complete by its job ID:
+
+```ts
+const job = await addJob("test", { foo: 123 })
+
+// Will throw if the job fails (reaches max retry attempts).
+await waitJob(job.id)
+```
+
+The function waits by simple polling. You can override the polling interval with:
+
+```ts
+await waitJob(job.id, {
+  pollInterval: 200, // Default is 1000 ms
+})
 ```
