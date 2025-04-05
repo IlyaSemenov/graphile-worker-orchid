@@ -1,7 +1,7 @@
 {
   "name": "graphile-worker-orchid",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Use graphile-worker with orchid-orm",
   "author": "Ilya Semenov",
   "license": "MIT",
