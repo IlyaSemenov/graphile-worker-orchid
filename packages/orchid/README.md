@@ -42,7 +42,7 @@ This also works in transaction:
 ```ts
 await db.$transaction(async () => {
   const user = await db.user.select("id", "name", "email").create(userInput)
-  // The job will only by added when and if the transaction commits.
+  // The job will only be added when and if the transaction commits.
   await addJob("sendRegistrationEmail", { user })
 })
 ```
