@@ -1,9 +1,9 @@
-import type { TaskSpec } from "graphile-worker"
+import type { DbJob, TaskSpec } from "graphile-worker"
 import type { OrchidORM, TableClasses } from "orchid-orm"
 
 export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
   /**
-   * Call graphile_worker.add_job() and return raw (unparsed) string response.
+   * Call graphile_worker.add_job() and return the job data.
    */
   async function addJob<TIdentifier extends keyof GraphileWorker.Tasks>(
     /**
@@ -18,9 +18,9 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
      * Additional details about how the job should be handled.
      */
     spec?: TaskSpec,
-  ): Promise<string> {
-    const res = await db.$query<{ job: string }>`
-      SELECT graphile_worker.add_job(
+  ): Promise<DbJob> {
+    const { rows: [{ job }] } = await db.$query<{ job: DbJob }>`
+      SELECT row_to_json(graphile_worker.add_job(
         identifier => ${identifier},
         payload => ${payload},
         queue_name => ${spec?.queueName},
@@ -30,8 +30,8 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
         priority => ${spec?.priority},
         flags => ${spec?.flags},
         job_key_mode => ${spec?.jobKeyMode}
-      ) job`
-    return res.rows[0].job
+    )) job`
+    return job
   }
 
   return { addJob }
