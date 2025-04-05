@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 1.1.1
+
+### Patch Changes
+
+- e202293: Fix runtime return type for `id`.
+
 ## 1.1.0
 
 ### Minor Changes
