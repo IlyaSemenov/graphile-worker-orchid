@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 1.2.1
+
+### Patch Changes
+
+- 531a75d: Fix crash when `addJob` was used with non-object payloads (e.g., raw strings).
+
 ## 1.2.0
 
 ### Minor Changes
