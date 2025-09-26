@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      graphile-worker:
+        specifier: '>=0.12'
+        version: 0.16.6(typescript@5.6.3)
+      orchid-orm:
+        specifier: ^1.12.0
+        version: 1.38.0(typescript@5.6.3)
     devDependencies:
       '@changesets/cli':
         specifier: ^2.27.10
@@ -23,41 +30,15 @@ importers:
       lint-staged:
         specifier: ^16.2.1
         version: 16.2.1
+      tsconfig-vite-node:
+        specifier: ^1.1.2
+        version: 1.1.2
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(postcss@8.5.6)(typescript@5.6.3)(yaml@2.8.1)
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
-
-  packages/orchid:
-    dependencies:
-      graphile-worker:
-        specifier: '>=0.12'
-        version: 0.16.6(typescript@5.6.3)
-      orchid-orm:
-        specifier: ^1.12.0
-        version: 1.38.0(typescript@5.6.3)
-    devDependencies:
-      tsconfig-vite-node:
-        specifier: ^1.1.2
-        version: 1.1.2
-      tsup:
-        specifier: ^8.3.5
-        version: 8.3.5(postcss@8.5.6)(typescript@5.6.3)(yaml@2.8.1)
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.5(@types/node@20.17.6)
-
-  packages/tasks:
-    dependencies:
-      graphile-worker:
-        specifier: '>=0.12'
-        version: 0.16.6(typescript@5.6.3)
-    devDependencies:
-      tsconfig-vite-node:
-        specifier: ^1.1.2
-        version: 1.1.2
-      tsup:
-        specifier: ^8.3.5
-        version: 8.3.5(postcss@8.5.6)(typescript@5.6.3)(yaml@2.8.1)
       vitest:
         specifier: ^2.1.5
         version: 2.1.5(@types/node@20.17.6)
