@@ -22,7 +22,7 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
     const { rows: [job] } = await db.$query<DbJob>`
       SELECT * FROM graphile_worker.add_job(
         identifier => ${identifier},
-        payload => ${payload},
+        payload => ${JSON.stringify(payload)},
         queue_name => ${spec?.queueName},
         run_at => ${spec?.runAt},
         max_attempts => ${spec?.maxAttempts},
