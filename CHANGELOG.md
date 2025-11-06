@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 1.3.0
+
+### Minor Changes
+
+- 3358a86: Add `unlockAllJobs`.
+
 ## 1.2.1
 
 ### Patch Changes
