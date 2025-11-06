@@ -73,9 +73,26 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
     }
   }
 
+  /**
+   * Unlock all locked jobs.
+   */
+  async function unlockAllJobs() {
+    await db.$query`
+      SELECT graphile_worker.force_unlock_workers(
+        COALESCE(ARRAY_AGG(locked_jobs.locked_by), '{}')
+      )
+      FROM (
+        SELECT locked_by
+        FROM graphile_worker.jobs 
+        WHERE locked_by IS NOT NULL
+      ) as locked_jobs
+    `
+  }
+
   return {
     addJob,
     removeJob,
     waitJob,
+    unlockAllJobs,
   }
 }
