@@ -23,13 +23,13 @@ export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
       SELECT * FROM graphile_worker.add_job(
         identifier => ${identifier},
         payload => ${JSON.stringify(payload)},
-        queue_name => ${spec?.queueName},
-        run_at => ${spec?.runAt},
-        max_attempts => ${spec?.maxAttempts},
-        job_key => ${spec?.jobKey},
-        priority => ${spec?.priority},
-        flags => ${spec?.flags},
-        job_key_mode => ${spec?.jobKeyMode}
+        queue_name => ${spec?.queueName ?? null},
+        run_at => ${spec?.runAt ?? null},
+        max_attempts => ${spec?.maxAttempts ?? null},
+        job_key => ${spec?.jobKey ?? null},
+        priority => ${spec?.priority ?? null},
+        flags => ${spec?.flags ?? null},
+        job_key_mode => ${spec?.jobKeyMode ?? null}
       )
     `
     return job
