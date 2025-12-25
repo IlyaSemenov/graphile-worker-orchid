@@ -13,7 +13,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     }
   },
@@ -27,7 +27,7 @@
   "scripts": {
     "prepare": "husky",
     "prepublishOnly": "pnpm build",
-    "build": "tsup",
+    "build": "tsdown",
     "lint": "eslint --fix .",
     "test": "vitest run"
   },
@@ -42,7 +42,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.1",
     "tsconfig-vite-node": "^1.1.2",
-    "tsup": "^8.3.5",
+    "tsdown": "^0.18.3",
     "typescript": "^5.6.3",
     "vitest": "^2.1.5"
   }
