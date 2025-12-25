@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 1.3.1
+
+### Patch Changes
+
+- c99f7c9: Fix crash when using postgres.js database backend.
+
 ## 1.3.0
 
 ### Minor Changes
