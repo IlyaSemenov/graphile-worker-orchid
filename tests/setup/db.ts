@@ -1,11 +1,12 @@
-import { runMigrations } from "graphile-worker"
 import { orchidORM, testTransaction } from "orchid-orm"
 import { afterAll, afterEach, beforeAll, beforeEach } from "vitest"
 
-const databaseURL = import.meta.env.VITE_DATABASE_URL
-if (!databaseURL) {
+const maybeDatabaseURL = import.meta.env.VITE_DATABASE_URL as string | undefined
+if (!maybeDatabaseURL) {
   throw new Error("VITE_DATABASE_URL is required to run PostgreSQL integration tests.")
 }
+const databaseURL = maybeDatabaseURL
+export { databaseURL }
 
 export const db = orchidORM(
   {
@@ -15,10 +16,7 @@ export const db = orchidORM(
   {},
 )
 
-beforeAll(async () => {
-  await runMigrations({ connectionString: databaseURL })
-  await testTransaction.start(db)
-})
+beforeAll(() => testTransaction.start(db))
 beforeEach(() => testTransaction.start(db))
 afterEach(() => testTransaction.rollback(db))
 afterAll(() => testTransaction.close(db))
