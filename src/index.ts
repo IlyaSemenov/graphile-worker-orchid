@@ -1,1 +1,1 @@
-export * from "./worker-utils"
+export * from "./workerUtils"
