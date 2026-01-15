@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.0.0
+
+### Major Changes
+
+- f1e1625: `makeWorkerUtils` now expects `db.$queryBuilder` instead of the full Orchid ORM instance.
+
 ## 1.3.2
 
 ### Patch Changes
