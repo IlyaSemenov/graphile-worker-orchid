@@ -8,6 +8,9 @@ import type { OrchidORM, TableClasses } from "orchid-orm"
  */
 export async function removeJob<T extends TableClasses>(
   db: OrchidORM<T>,
+  /**
+   * The job_key of the job to remove.
+   */
   jobKey: string,
 ): Promise<DbJob | undefined> {
   // remove_job() always returns a single row (having all NULLs if not found).

@@ -1,10 +1,24 @@
 import type { DbJob } from "graphile-worker"
 import type { OrchidORM, TableClasses } from "orchid-orm"
 
+/**
+ * Wait for a job to complete by its job ID.
+ *
+ * Throws if the job reaches max attempts.
+ */
 export async function waitJob<T extends TableClasses>(
   db: OrchidORM<T>,
+  /**
+   * The ID of the job to wait for.
+   */
   jobId: string,
+  /**
+   * Optional polling configuration.
+   */
   opts?: {
+    /**
+     * Poll interval in milliseconds.
+     */
     pollInterval: number
   },
 ) {
