@@ -1,8 +1,8 @@
-import type { OrchidORM, TableClasses } from "orchid-orm"
+import type { Db } from "orchid-orm"
 
 import { addJob, removeJob, unlockAllJobs, waitJob } from "./utils"
 
-export function makeWorkerUtils<T extends TableClasses>(db: OrchidORM<T>) {
+export function makeWorkerUtils(db: Db) {
   return {
     /**
      * Call graphile_worker.add_job() and return the job data.

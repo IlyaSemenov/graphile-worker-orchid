@@ -1,10 +1,10 @@
-import type { OrchidORM, TableClasses } from "orchid-orm"
+import type { Db } from "orchid-orm"
 
 /**
  * Unlock all locked jobs.
  */
-export async function unlockAllJobs<T extends TableClasses>(db: OrchidORM<T>) {
-  await db.$query`
+export async function unlockAllJobs(db: Db) {
+  await db.query`
     SELECT graphile_worker.force_unlock_workers(
       COALESCE(ARRAY_AGG(locked_jobs.locked_by), '{}')
     )

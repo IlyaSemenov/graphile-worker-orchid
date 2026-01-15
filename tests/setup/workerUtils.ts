@@ -24,4 +24,4 @@ beforeAll(async () => {
   await withLock("runMigrations", () => runMigrations({ connectionString: databaseURL }))
 })
 
-export const { addJob, removeJob } = makeWorkerUtils(db)
+export const { addJob, removeJob } = makeWorkerUtils(db.$queryBuilder)

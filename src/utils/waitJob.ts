@@ -1,13 +1,13 @@
 import type { DbJob } from "graphile-worker"
-import type { OrchidORM, TableClasses } from "orchid-orm"
+import type { Db } from "orchid-orm"
 
 /**
  * Wait for a job to complete by its job ID.
  *
  * Throws if the job reaches max attempts.
  */
-export async function waitJob<T extends TableClasses>(
-  db: OrchidORM<T>,
+export async function waitJob(
+  db: Db,
   /**
    * The ID of the job to wait for.
    */
@@ -24,7 +24,7 @@ export async function waitJob<T extends TableClasses>(
 ) {
   const { pollInterval = 1000 } = opts ?? {}
   while (true) {
-    const { rows: [job] } = await db.$query<Pick<DbJob, "attempts" | "max_attempts" | "locked_by">>`
+    const { rows: [job] } = await db.query<Pick<DbJob, "attempts" | "max_attempts" | "locked_by">>`
         SELECT attempts, max_attempts, locked_by
         FROM graphile_worker.jobs
         WHERE id = ${jobId}

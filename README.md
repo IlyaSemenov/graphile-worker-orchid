@@ -25,7 +25,7 @@ const {
   removeJob,
   waitJob,
   unlockAllJobs,
-} = makeWorkerUtils(db)
+} = makeWorkerUtils(db.$queryBuilder)
 ```
 
 ### addJob
@@ -102,7 +102,7 @@ import { createAdvisoryLock } from "pg-advisory-lock"
 const databaseUrl = "postgresql://user:pass@localhost/db"
 const db = orchidORM({ databaseURL: databaseUrl }, {})
 
-const { unlockAllJobs } = makeWorkerUtils(db)
+const { unlockAllJobs } = makeWorkerUtils(db.$queryBuilder)
 
 const { withLock } = createAdvisoryLock(databaseUrl)
 
