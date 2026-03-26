@@ -1,6 +1,12 @@
 import type { DbJob, TaskSpec } from "graphile-worker"
 import type { Db } from "orchid-orm"
 
+export type BoundAddJob = <TIdentifier extends keyof GraphileWorker.Tasks>(
+  identifier: TIdentifier,
+  payload: GraphileWorker.Tasks[TIdentifier],
+  spec?: TaskSpec,
+) => Promise<DbJob>
+
 /**
  * Call graphile_worker.add_job() and return the job data.
  */
