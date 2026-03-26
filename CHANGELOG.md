@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.0.1
+
+### Patch Changes
+
+- c114f3b: Fix types in bound `addJob`.
+
 ## 2.0.0
 
 ### Major Changes
