@@ -1,3 +1,4 @@
+import { runMigrations } from "graphile-worker"
 import { orchidORM, testTransaction } from "orchid-orm"
 import { afterAll, afterEach, beforeAll, beforeEach } from "vitest"
 
@@ -16,7 +17,10 @@ export const db = orchidORM(
   {},
 )
 
-beforeAll(() => testTransaction.start(db))
+beforeAll(async () => {
+  await runMigrations({ connectionString: databaseURL })
+  await testTransaction.start(db)
+})
 beforeEach(() => testTransaction.start(db))
 afterEach(() => testTransaction.rollback(db))
 afterAll(() => testTransaction.close(db))

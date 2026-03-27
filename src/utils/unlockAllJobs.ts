@@ -5,13 +5,23 @@ import type { Db } from "orchid-orm"
  */
 export async function unlockAllJobs(db: Db) {
   await db.query`
-    SELECT graphile_worker.force_unlock_workers(
-      COALESCE(ARRAY_AGG(locked_jobs.locked_by), '{}')
-    )
-    FROM (
-      SELECT locked_by
-      FROM graphile_worker.jobs 
-      WHERE locked_by IS NOT NULL
-    ) as locked_jobs
+    DO $$
+    DECLARE
+      worker_ids text[];
+    BEGIN
+      IF to_regclass('graphile_worker.jobs') IS NULL THEN
+        RETURN;
+      END IF;
+
+      EXECUTE $sql$
+        SELECT COALESCE(array_agg(locked_by), '{}'::text[])
+        FROM graphile_worker.jobs
+        WHERE locked_by IS NOT NULL
+      $sql$
+      INTO worker_ids;
+
+      PERFORM graphile_worker.force_unlock_workers(worker_ids);
+    END
+    $$;
   `
 }

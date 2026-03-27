@@ -84,6 +84,7 @@ await unlockAllJobs()
 ```
 
 This is useful for recovering from situations where jobs remain locked (for example, after a worker crash).
+If the `graphile_worker` schema has not been initialized yet, this call is a no-op.
 
 This should only be used when you can guarantee that all workers are stopped.
 
