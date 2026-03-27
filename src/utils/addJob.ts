@@ -1,11 +1,5 @@
-import type { DbJob, TaskSpec } from "graphile-worker"
+import type { DbJob, Job, TaskSpec } from "graphile-worker"
 import type { Db } from "orchid-orm"
-
-export type BoundAddJob = <TIdentifier extends keyof GraphileWorker.Tasks>(
-  identifier: TIdentifier,
-  payload: GraphileWorker.Tasks[TIdentifier],
-  spec?: TaskSpec,
-) => Promise<DbJob>
 
 /**
  * Call graphile_worker.add_job() and return the job data.
@@ -24,7 +18,7 @@ export async function addJob<TIdentifier extends keyof GraphileWorker.Tasks>(
    * Additional details about how the job should be handled.
    */
   spec?: TaskSpec,
-): Promise<DbJob> {
+): Promise<Job> {
   const { rows: [job] } = await db.query<DbJob>`
     SELECT * FROM graphile_worker.add_job(
       identifier => ${identifier},
@@ -38,5 +32,5 @@ export async function addJob<TIdentifier extends keyof GraphileWorker.Tasks>(
       job_key_mode => ${spec?.jobKeyMode ?? null}
     )
   `
-  return job
+  return { ...job, task_identifier: identifier }
 }

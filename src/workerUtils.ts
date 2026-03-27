@@ -1,6 +1,6 @@
+import type { AddJobFunction } from "graphile-worker"
 import type { Db } from "orchid-orm"
 
-import type { BoundAddJob } from "./utils"
 import { addJob, removeJob, unlockAllJobs, waitJob } from "./utils"
 
 export function makeWorkerUtils(db: Db) {
@@ -12,7 +12,7 @@ export function makeWorkerUtils(db: Db) {
      * @param payload - The payload (typically a JSON object) that will be passed to the task executor.
      * @param spec - Additional details about how the job should be handled.
      */
-    addJob: addJob.bind(null, db) as BoundAddJob,
+    addJob: addJob.bind(null, db) as AddJobFunction,
     /**
      * Remove pending job by job_key.
      *
