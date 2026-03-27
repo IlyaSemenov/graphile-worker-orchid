@@ -1,5 +1,15 @@
 # graphile-worker-orchid
 
+## 2.1.0
+
+### Minor Changes
+
+- ee53cd4: Return `addJob` as the true upstream `AddJobFunction`.
+
+### Patch Changes
+
+- 04a3e09: Allow `unlockAllJobs` when graphile_worker is not yet installed (#3).
+
 ## 2.0.1
 
 ### Patch Changes
