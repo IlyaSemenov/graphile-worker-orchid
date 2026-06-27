@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.3.0
+
+### Minor Changes
+
+- c3eac64: Add `runMigrations`, which runs graphile-worker migrations through the orchid-orm connection (honoring the active transaction).
+
 ## 2.2.0
 
 ### Minor Changes
