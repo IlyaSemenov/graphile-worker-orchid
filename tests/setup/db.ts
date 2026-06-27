@@ -1,5 +1,6 @@
 import { runMigrations } from "graphile-worker"
-import { orchidORM, testTransaction } from "orchid-orm"
+import { testTransaction } from "orchid-orm"
+import { orchidORM } from "orchid-orm/postgres-js"
 import { afterAll, afterEach, beforeAll, beforeEach } from "vitest"
 
 const maybeDatabaseURL = import.meta.env.VITE_DATABASE_URL as string | undefined

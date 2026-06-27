@@ -11,5 +11,5 @@ declare global {
   }
 }
 
-export const workerUtils = makeWorkerUtils(db.$queryBuilder)
+export const workerUtils = makeWorkerUtils(db.$qb)
 export const { addJob, removeJob } = workerUtils

@@ -22,7 +22,7 @@ export async function addJob<TIdentifier extends keyof GraphileWorker.Tasks>(
   const { rows: [job] } = await db.query<DbJob>`
     SELECT * FROM graphile_worker.add_job(
       identifier => ${identifier},
-      payload => ${JSON.stringify(payload)},
+      payload => ${payload},
       queue_name => ${spec?.queueName ?? null},
       run_at => ${spec?.runAt ?? null},
       max_attempts => ${spec?.maxAttempts ?? null},

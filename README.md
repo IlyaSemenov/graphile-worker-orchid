@@ -14,7 +14,7 @@ Create worker utils:
 
 ```ts
 import { makeWorkerUtils } from "graphile-worker-orchid"
-import { orchidORM } from "orchid-orm"
+import { orchidORM } from "orchid-orm/postgres-js"
 
 const db = orchidORM({ databaseURL: "..." }, {
   // table definitions
@@ -25,7 +25,7 @@ const {
   removeJob,
   waitJob,
   unlockAllJobs,
-} = makeWorkerUtils(db.$queryBuilder)
+} = makeWorkerUtils(db.$qb)
 ```
 
 ### addJob
@@ -97,13 +97,13 @@ This should only be used when you can guarantee that all workers are stopped.
 
 ```ts
 import { run } from "graphile-worker"
-import { orchidORM } from "orchid-orm"
+import { orchidORM } from "orchid-orm/postgres-js"
 import { createAdvisoryLock } from "pg-advisory-lock"
 
 const databaseUrl = "postgresql://user:pass@localhost/db"
 const db = orchidORM({ databaseURL: databaseUrl }, {})
 
-const { unlockAllJobs } = makeWorkerUtils(db.$queryBuilder)
+const { unlockAllJobs } = makeWorkerUtils(db.$qb)
 
 const { withLock } = createAdvisoryLock(databaseUrl)
 
