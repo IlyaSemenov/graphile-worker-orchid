@@ -1,7 +1,7 @@
 import type { AddJobFunction } from "graphile-worker"
 import type { Db } from "orchid-orm"
 
-import { addJob, removeJob, unlockAllJobs, waitJob } from "./utils"
+import { addJob, removeJob, runMigrations, unlockAllJobs, waitJob } from "./utils"
 
 export function makeWorkerUtils(db: Db) {
   return {
@@ -34,5 +34,10 @@ export function makeWorkerUtils(db: Db) {
      * Unlock all locked jobs.
      */
     unlockAllJobs: unlockAllJobs.bind(null, db),
+    /**
+     * Install (or upgrade) the graphile-worker schema through the orchid-orm
+     * connection, honoring the active transaction.
+     */
+    runMigrations: runMigrations.bind(null, db),
   }
 }

@@ -25,8 +25,19 @@ const {
   removeJob,
   waitJob,
   unlockAllJobs,
+  runMigrations,
 } = makeWorkerUtils(db.$qb)
 ```
+
+### runMigrations
+
+Install (or upgrade) the `graphile_worker` schema:
+
+```ts
+await runMigrations()
+```
+
+Unlike graphile-worker's own `runMigrations`, this runs through the connection managed by orchid-orm and honors the active transaction, so it can participate in your own migration flow instead of opening a separate connection.
 
 ### addJob
 

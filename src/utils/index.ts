@@ -1,4 +1,5 @@
 export * from "./addJob"
 export * from "./removeJob"
+export * from "./runMigrations"
 export * from "./unlockAllJobs"
 export * from "./waitJob"
