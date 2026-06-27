@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.2.0
+
+### Minor Changes
+
+- a83b22d: Require orchid-orm `>=1.72.0` and let the database driver serialize the job payload.
+
 ## 2.1.0
 
 ### Minor Changes
