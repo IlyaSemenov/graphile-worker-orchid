@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.4.0
+
+### Minor Changes
+
+- 1c9b53d: Add `createTestWorkerUtils` in `graphile-worker-orchid/testing`, a test double of the worker utils that enqueues jobs through the given `addJob` and tracks pending jobs for `removeJob` until `clear()`, and export the `WorkerUtils` type.
+
 ## 2.3.1
 
 ### Patch Changes
