@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.3.1
+
+### Patch Changes
+
+- 19dd314: Make `addJob` treat an empty job key or queue name and a zero priority or max attempts as unset, like `addJob` of graphile-worker.
+
 ## 2.3.0
 
 ### Minor Changes
