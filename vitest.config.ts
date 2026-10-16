@@ -5,5 +5,9 @@ export default defineConfig({
     // Some tests drop the shared graphile_worker schema; running files in parallel
     // can deadlock when another file is using the same schema at the same time.
     fileParallelism: false,
+    typecheck: {
+      enabled: true,
+      include: ["tests/**/*.test-d.ts"],
+    },
   },
 })

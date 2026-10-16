@@ -3,6 +3,11 @@ import type { Db } from "orchid-orm"
 
 import { addJob, removeJob, runMigrations, unlockAllJobs, waitJob } from "./utils"
 
+/**
+ * Worker utils returned by {@link makeWorkerUtils}.
+ */
+export type WorkerUtils = ReturnType<typeof makeWorkerUtils>
+
 export function makeWorkerUtils(db: Db) {
   return {
     /**

@@ -11,17 +11,30 @@
     "url": "https://github.com/IlyaSemenov/graphile-worker-orchid"
   },
   "imports": {
-    "#lib": "./src/index.ts"
+    "#lib": "./src/index.ts",
+    "#lib/testing": "./src/testing.ts"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./testing": {
+      "import": "./dist/testing.mjs",
+      "require": "./dist/testing.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "typesVersions": {
+    "*": {
+      "testing": [
+        "./dist/testing.d.cts"
+      ]
     }
   },
-  "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
   "files": [
     "!src/**/*.test.*",
     "dist",
@@ -39,6 +52,7 @@
     "orchid-orm": ">=1.72.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/core": "^0.18.5",
     "@changesets/cli": "^2.27.10",
     "@ilyasemenov/eslint-config": "^1.4.2",
     "eslint": "^9.36.0",
@@ -47,6 +61,7 @@
     "lint-staged": "^16.2.1",
     "orchid-orm": "~1.72.9",
     "postgres": "^3.4.9",
+    "publint": "^0.3.25",
     "tsconfig-vite-node": "^1.1.2",
     "tsdown": "^0.18.3",
     "typescript": "^5.6.3",

@@ -130,3 +130,44 @@ await withLock("graphile-worker", async () => {
 ```
 
 </details>
+
+## Testing
+
+`createTestWorkerUtils()` from `graphile-worker-orchid/testing` creates a test double of the worker utils that does not touch the database.
+It enqueues jobs through the given `addJob`, such as the recorder from `createTestJobs()` of [graphile-worker-tasks](https://github.com/IlyaSemenov/graphile-worker-tasks):
+
+```ts
+import { createTestWorkerUtils } from "graphile-worker-orchid/testing"
+import { createTestJobs } from "graphile-worker-tasks/testing"
+
+export const testJobs = createTestJobs()
+
+export const workerUtils = createTestWorkerUtils({
+  addJob: testJobs.addJob,
+})
+```
+
+Provide `workerUtils` to the code under test instead of the result of `makeWorkerUtils`, for example through dependency injection or a module mock.
+
+Pending jobs outlive a test, unlike jobs added in a rolled back test transaction, so forget them between tests:
+
+```ts
+import { beforeEach } from "vitest"
+
+beforeEach(() => {
+  testJobs.clear()
+  workerUtils.clear()
+})
+```
+
+- `addJob` calls the given `addJob` and tracks pending jobs by job key like `graphile_worker.add_job()`: adding a job with the key of a pending job updates that job according to `jobKeyMode`, and `addJob` returns the updated job.
+- `removeJob` returns the pending job with the given key and forgets it, or returns `undefined` when there is none.
+- Jobs never run or get locked, so they stay pending until removed or cleared.
+- `waitJob`, `unlockAllJobs`, and `runMigrations` throw unless given in the options:
+
+```ts
+const workerUtils = createTestWorkerUtils({
+  addJob: testJobs.addJob,
+  waitJob: async () => {},
+})
+```
