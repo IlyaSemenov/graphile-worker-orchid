@@ -19,17 +19,18 @@ export async function addJob<TIdentifier extends keyof GraphileWorker.Tasks>(
    */
   spec?: TaskSpec,
 ): Promise<Job> {
+  // Like addJob of graphile-worker, pass empty and zero spec values as null, so that the database defaults apply.
   const { rows: [job] } = await db.query<DbJob>`
     SELECT * FROM graphile_worker.add_job(
       identifier => ${identifier},
       payload => ${payload},
-      queue_name => ${spec?.queueName ?? null},
-      run_at => ${spec?.runAt ?? null},
-      max_attempts => ${spec?.maxAttempts ?? null},
-      job_key => ${spec?.jobKey ?? null},
-      priority => ${spec?.priority ?? null},
-      flags => ${spec?.flags ?? null},
-      job_key_mode => ${spec?.jobKeyMode ?? null}
+      queue_name => ${spec?.queueName || null},
+      run_at => ${spec?.runAt || null},
+      max_attempts => ${spec?.maxAttempts || null},
+      job_key => ${spec?.jobKey || null},
+      priority => ${spec?.priority || null},
+      flags => ${spec?.flags || null},
+      job_key_mode => ${spec?.jobKeyMode || null}
     )
   `
   return { ...job, task_identifier: identifier }
