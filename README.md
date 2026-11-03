@@ -23,6 +23,7 @@ const db = orchidORM({ databaseURL: "..." }, {
 const {
   addJob,
   removeJob,
+  isJobActive,
   waitJob,
   unlockAllJobs,
   runMigrations,
@@ -65,6 +66,30 @@ Remove job by job key:
 
 ```ts
 await removeJob("testing")
+```
+
+### isJobActive
+
+Check whether the job with the given job key may still run or be running now:
+
+```ts
+const active = await isJobActive("testing")
+```
+
+It returns `true` when the job has attempts left or when a worker locked it less than 4 hours ago.
+Such a lock means that the job is running or that its worker died too recently for graphile-worker to treat the lock as stale.
+It returns `false` when there is no such job (it completed or was removed), or when it has no attempts left and is either unlocked or locked longer than 4 hours ago.
+graphile-worker treats a lock older than 4 hours as stale, so `isJobActive` returns `false` for a job on its last attempt that runs longer than that.
+It runs through the connection managed by orchid-orm and sees jobs added in the active transaction.
+
+This is useful when the application tracks the status of a long operation in its own table and needs to detect an operation whose job is no longer active, for example after the worker was killed:
+
+```ts
+const operation = await db.operation.findByOptional({ status: "running" })
+if (operation && !await isJobActive(`operation:${operation.id}`)) {
+  // Check the status again, in case the worker completed the operation after it was read.
+  await db.operation.where({ id: operation.id, status: "running" }).update({ status: "interrupted" })
+}
 ```
 
 ### waitJob
@@ -162,6 +187,7 @@ beforeEach(() => {
 
 - `addJob` calls the given `addJob` and tracks pending jobs by job key like `graphile_worker.add_job()`: adding a job with the key of a pending job updates that job according to `jobKeyMode`, and `addJob` returns the updated job.
 - `removeJob` returns the pending job with the given key and forgets it, or returns `undefined` when there is none.
+- `isJobActive` returns `true` for the key of a pending job, so remove the job with `removeJob` to simulate a job that is no longer active, for example, after a worker has been interrupted.
 - Jobs never run or get locked, so they stay pending until removed or cleared.
 - `waitJob`, `unlockAllJobs`, and `runMigrations` throw unless given in the options:
 

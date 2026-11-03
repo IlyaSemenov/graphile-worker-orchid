@@ -183,6 +183,25 @@ describe("removeJob", () => {
   })
 })
 
+describe("isJobActive", () => {
+  test("returns true for a pending job until it is removed", async () => {
+    const workerUtils = createTestWorkerUtils({ addJob: createAddJob() })
+
+    await workerUtils.addJob("task1", { foo: 1 }, { jobKey: "key1" })
+    expect(await workerUtils.isJobActive("key1")).toBe(true)
+    expect(await workerUtils.isJobActive("key2")).toBe(false)
+
+    await workerUtils.removeJob("key1")
+    expect(await workerUtils.isJobActive("key1")).toBe(false)
+  })
+
+  test("returns false for an unknown key", async () => {
+    const workerUtils = createTestWorkerUtils({ addJob: createAddJob() })
+
+    expect(await workerUtils.isJobActive("key1")).toBe(false)
+  })
+})
+
 describe("clear", () => {
   test("forgets pending jobs", async () => {
     const workerUtils = createTestWorkerUtils({ addJob: createAddJob() })
@@ -191,6 +210,7 @@ describe("clear", () => {
     await workerUtils.addJob("task1", { foo: 2 }, { jobKey: "key2" })
     workerUtils.clear()
 
+    expect(await workerUtils.isJobActive("key2")).toBe(false)
     expect(await workerUtils.removeJob("key2")).toBeUndefined()
     const job2 = await workerUtils.addJob("task1", { foo: 3 }, { jobKey: "key1" })
     expect(job2).toMatchObject({ payload: { foo: 3 }, revision: 0 })

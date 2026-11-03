@@ -12,4 +12,4 @@ declare global {
 }
 
 export const workerUtils = makeWorkerUtils(db.$qb)
-export const { addJob, removeJob } = workerUtils
+export const { addJob, isJobActive, removeJob } = workerUtils

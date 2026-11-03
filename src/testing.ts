@@ -38,6 +38,7 @@ export type TestWorkerUtils = WorkerUtils & {
  * Create a test double of the worker utils that enqueues jobs through `options.addJob`.
  *
  * The returned `addJob` tracks pending jobs by job key the way graphile_worker.add_job() does, so `removeJob` returns the job it removes, as the worker utils of `makeWorkerUtils` do.
+ * `isJobActive` returns true for the key of a pending job, so a test can simulate a job that is no longer active, for example, after a worker has been interrupted, by calling `removeJob` with the key.
  */
 export function createTestWorkerUtils(options: TestWorkerUtilsOptions): TestWorkerUtils {
   const pendingJobs = new Map<string, Job>()
@@ -79,6 +80,9 @@ export function createTestWorkerUtils(options: TestWorkerUtilsOptions): TestWork
       pendingJobs.delete(jobKey)
       const { task_identifier: _, ...dbJob } = job
       return dbJob
+    },
+    async isJobActive(jobKey) {
+      return pendingJobs.has(jobKey)
     },
     waitJob: options.waitJob ?? createNotImplemented("waitJob"),
     unlockAllJobs: options.unlockAllJobs ?? createNotImplemented("unlockAllJobs"),

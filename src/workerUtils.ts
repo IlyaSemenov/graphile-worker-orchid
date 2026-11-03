@@ -1,7 +1,7 @@
 import type { AddJobFunction } from "graphile-worker"
 import type { Db } from "orchid-orm"
 
-import { addJob, removeJob, runMigrations, unlockAllJobs, waitJob } from "./utils"
+import { addJob, isJobActive, removeJob, runMigrations, unlockAllJobs, waitJob } from "./utils"
 
 /**
  * Worker utils returned by {@link makeWorkerUtils}.
@@ -26,6 +26,15 @@ export function makeWorkerUtils(db: Db) {
      * @param jobKey - The job_key of the job to remove.
      */
     removeJob: removeJob.bind(null, db),
+    /**
+     * Check whether the job with the given job_key may still run or be running now.
+     *
+     * Return true when the job has attempts left or a worker locked it less than 4 hours ago.
+     * Return false when the job is missing (completed or removed), or when it has no attempts left and is either unlocked or locked longer than 4 hours ago.
+     *
+     * @param jobKey - The job_key of the job to check.
+     */
+    isJobActive: isJobActive.bind(null, db),
     /**
      * Wait for a job to complete by its job ID.
      *

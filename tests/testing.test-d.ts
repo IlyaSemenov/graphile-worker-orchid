@@ -19,6 +19,7 @@ test("createTestWorkerUtils returns TestWorkerUtils", () => {
   expectTypeOf(workerUtils.clear).toEqualTypeOf<() => void>()
   expectTypeOf(workerUtils.addJob).toEqualTypeOf<AddJobFunction>()
   expectTypeOf(workerUtils.removeJob).returns.toEqualTypeOf<Promise<DbJob | undefined>>()
+  expectTypeOf(workerUtils.isJobActive).toEqualTypeOf<(jobKey: string) => Promise<boolean>>()
 })
 
 test("createTestWorkerUtils options", () => {
