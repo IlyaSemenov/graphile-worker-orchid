@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.5.0
+
+### Minor Changes
+
+- ae67d02: Add `isJobActive`, which checks through the orchid-orm connection (honoring the active transaction) whether the job with the given job key may still run or be running now, and support it in `createTestWorkerUtils`.
+
 ## 2.4.0
 
 ### Minor Changes
