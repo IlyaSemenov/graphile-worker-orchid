@@ -1,5 +1,11 @@
 # graphile-worker-orchid
 
+## 2.5.1
+
+### Patch Changes
+
+- 77075ce: Make `addJob` store an omitted payload as an empty object, like `addJob` of graphile-worker, instead of failing with `UNDEFINED_VALUE`.
+
 ## 2.5.0
 
 ### Minor Changes
