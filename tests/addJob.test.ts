@@ -13,6 +13,12 @@ test("addJob", async () => {
     .then(({ rows }) => expect(rows).toHaveLength(1))
 })
 
+test("addJob stores an omitted payload as an empty object", async () => {
+  const job = await addJob("taskWithoutPayload", undefined)
+
+  expect(job.payload).toEqual({})
+})
+
 test("addJob treats empty and zero spec values as unset", async () => {
   const job = await addJob("testTask", { foo: 123 }, { queueName: "", jobKey: "", maxAttempts: 0, priority: 0 })
 
