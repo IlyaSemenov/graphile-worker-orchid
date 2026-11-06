@@ -1,8 +1,6 @@
-name: Test and Release
+name: Test
 
 env:
-  # Keep in sync with .changeset/config.json:baseBranch
-  MAIN_REF: refs/heads/main
   # For jdx/mise-action@v3, see https://github.com/jdx/mise-action/issues/394
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
@@ -12,15 +10,12 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-# Publish to npm with OIDC
 permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+  contents: read
 
 jobs:
-  test-and-release:
-    name: Test and Release
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     services:
@@ -55,21 +50,3 @@ jobs:
         run: pnpm run test
         env:
           VITE_DATABASE_URL: postgres://postgres:postgres@localhost
-
-      - name: Capture new release versions
-        if: ${{ github.ref == env.MAIN_REF }}
-        run: |
-          if npx @changesets/cli status --output=release.json; then
-            echo "RELEASE=Version $(jq -r '.releases[0].newVersion' release.json)" >> "$GITHUB_ENV"
-            rm release.json
-          fi
-
-      - name: Create Release Pull Request or Publish to npm
-        if: ${{ github.ref == env.MAIN_REF }}
-        uses: changesets/action@v1
-        with:
-          publish: npx changeset publish
-          title: ${{ env.RELEASE }}
-          commit: ${{ env.RELEASE }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
